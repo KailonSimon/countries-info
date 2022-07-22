@@ -56,7 +56,7 @@ const Home: NextPage = ({
         (country: any) => country.cca2.toLowerCase() == code.toLowerCase()
       )
     );
-    router.push(`/${code}`, undefined, { scroll: false });
+    router.push(`/${code}`, undefined, { scroll: false, shallow: true });
   }
 
   useEffect(() => {
