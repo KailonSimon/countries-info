@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import CountriesList from "../components/CountriesList";
 import CountryOverlay from "../components/CountryOverlay";
 import Layout from "../components/Layout";
+import { mapValues } from "lodash";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
@@ -21,7 +22,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({
   params,
 }: GetStaticPropsContext) => {
-  const res = await fetch("https://restcountries.com/v3.1/all");
+  const res = await fetch(
+    "https://restcountries.com/v3.1/all?fields=cca2,name,flags,capital,population"
+  );
   const countries = await res.json();
   const [countryCode = null] = (params?.code as string[]) || [];
 
@@ -39,25 +42,21 @@ const Home: NextPage = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
   const [openCountry, setOpenCountry] = useState(null);
-  let [isOpen, setIsOpen] = useState(true);
 
   function onClose() {
-    router.push("/", undefined, { scroll: false }).catch((e) => {
+    router.push("/", undefined, { scroll: false, shallow: true }).catch((e) => {
       console.error(e);
     });
-    setIsOpen(false);
     setOpenCountry(null);
   }
 
-  function openModal() {
-    setIsOpen(true);
-    if (code) {
-      setOpenCountry(
-        countries.find(
-          (country: any) => country.cca2.toLowerCase() == code.toLowerCase()
-        )
-      );
-    }
+  function openModal(code: string) {
+    setOpenCountry(
+      countries.find(
+        (country: any) => country.cca2.toLowerCase() == code.toLowerCase()
+      )
+    );
+    router.push(`/${code}`, undefined, { scroll: false });
   }
 
   useEffect(() => {
@@ -68,13 +67,15 @@ const Home: NextPage = ({
         )
       );
     }
-  }, [code, countries, isOpen]);
+  }, [code, countries]);
 
   return (
     <Layout>
       <div className="w-full flex flex-col overflow-hidden">
         <div className="w-full flex justify-center mb-4">
-          {countries && <CountriesList countries={countries} />}
+          {countries && (
+            <CountriesList countries={countries} openModal={openModal} />
+          )}
           {openCountry && (
             <CountryOverlay country={openCountry} onClose={onClose} />
           )}
