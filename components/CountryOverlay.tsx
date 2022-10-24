@@ -45,11 +45,24 @@ export default function CountryOverlay({ country, onClose }: any) {
                     </button>
                   </div>
                   <Dialog.Title
-                    as="h3"
+                    as="div"
                     className="text-3xl font-medium text-white"
                     ref={titleRef}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.5rem",
+                    }}
                   >
                     {country.name.common}
+
+                    <img
+                      src={country.flags.png}
+                      style={{
+                        maxHeight: 25,
+                        borderRadius: 2,
+                      }}
+                    />
                   </Dialog.Title>
                   {country.name.common !== country.name.official && (
                     <h4 className="text-lg text-gray-100">
@@ -57,7 +70,10 @@ export default function CountryOverlay({ country, onClose }: any) {
                     </h4>
                   )}
                   <div className="mt-2 text-white">
-                    <p>Capital: {country.capital}</p>
+                    <p>
+                      Capital:{" "}
+                      {country.capital.length ? country.capital : "N/A"}
+                    </p>
                     <NumberFormat
                       value={country.population}
                       displayType={"text"}

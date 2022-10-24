@@ -18,11 +18,6 @@ function CountryCard({ country, openModal }: any) {
       layout
       onClick={() => openModal(country.cca2)}
     >
-      <div className="absolute border-t border-gray-400 bottom-0 w-full h-50% bg-black text-center rounded-b-lg">
-        <span className="text-white text-xs font-sans font-bold">
-          {country.name.common}
-        </span>
-      </div>
       <img
         src={country.flags.png}
         alt={country.name.common}

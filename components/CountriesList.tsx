@@ -29,6 +29,7 @@ function CountriesList({ countries, openModal }: any) {
           placeholder="Search"
           className="border-2 border-black px-2 py-2 focus:outline-0 active:outline-0"
           onChange={handleInputChange}
+          spellCheck={false}
         />
       </div>
       <div className="w-fit max-w-6xl flex flex-row flex-wrap justify-center gap-x-4 gap-y-8">
